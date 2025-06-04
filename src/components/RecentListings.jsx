@@ -1,19 +1,50 @@
-import { useEffect, useState } from 'react';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const RecentListings = () => {
   const [cars, setCars] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulated fetch – replace this with your actual API call
-    fetch('http://localhost:3000/cars') // or from your backend
-      .then(res => res.json())
-      .then(data => {
-        // Sort by dateAdded descending and take latest 8
-        const sorted = data.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+    const fetchCars = async () => {
+      try {
+        const token = localStorage.getItem("access-token");
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+        // Try fetching cars from your API
+        const response = await axios.get("http://localhost:3000/cars", {
+          headers,
+        });
+
+        const sorted = response.data.sort(
+          (a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)
+        );
         setCars(sorted.slice(0, 8));
-      });
+      } catch (err) {
+        // If token required but not present or error, fallback to public data fetch
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          // fallback fetch without token from public API or mock data
+          try {
+            // example: fallback public endpoint if you have one
+            const publicResponse = await axios.get("http://localhost:3000/cars");
+            const sorted = publicResponse.data.sort(
+              (a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)
+            );
+            setCars(sorted.slice(0, 8));
+          } catch (publicErr) {
+            setError("Failed to load cars for guest users.");
+          }
+        } else {
+          setError("Failed to fetch cars.");
+        }
+      }
+    };
+
+    fetchCars();
   }, []);
+
+  if (error) return <p className="text-red-500 text-center mt-8">{error}</p>;
 
   return (
     <section className="py-16 bg-base-100">
@@ -34,8 +65,8 @@ const RecentListings = () => {
                 />
               </figure>
               <div className="card-body">
-                <h3 className="text-xl font-semibold">{car.model}</h3>
-                <p className="text-blue-600 font-medium">${car.dailyPrice}/day</p>
+                <h3 className="text-2xl font-semibold text-blue-700">{car.model}</h3>
+                <p className="text-orange-500 font-medium">${car.dailyPrice}/day</p>
 
                 <div className="flex items-center gap-2">
                   {car.availability ? (
