@@ -5,7 +5,7 @@ const ErrorPage = () => {
      return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-amber-50 text-center p-6">
       <img
-        src="https://i.ibb.co/jnVKsRt/error.jpg"
+        src="https://i.ibb.co/4nsBGxJJ/404-error-background-with-car-wheel-flat-style-23-2147761283.jpg"
         alt="404 Food Not Found"
         className="w-64 mb-6"
       />

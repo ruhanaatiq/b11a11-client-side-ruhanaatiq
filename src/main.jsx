@@ -13,12 +13,15 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import AuthProvider from './provider/AuthProvider.jsx';
+import Navbar from './components/Navbar.jsx';
+import Home from './pages/Home.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />, // 🌟 Shared layout with Navbar
     children: [
+      { path: '/', element: <Home /> }, 
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '*', element: <ErrorPage /> }, // 404 fallback
