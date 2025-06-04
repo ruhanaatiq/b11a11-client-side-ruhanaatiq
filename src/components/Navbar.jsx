@@ -52,7 +52,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-blue-600">
-          <img src="/logo.png" alt="Logo" className="h-8 w-8" />
+          <img src="https://i.ibb.co/tPwbDVX9/logo.jpg" alt="Logo" className="h-8 w-8" />
           <span>DriveNow</span>
         </Link>
 
