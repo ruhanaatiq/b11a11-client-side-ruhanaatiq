@@ -15,7 +15,10 @@ import ErrorPage from './pages/ErrorPage.jsx';
 import AuthProvider from './provider/AuthProvider.jsx';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
-
+import AvailableCars from './pages/AvailableCars.jsx';
+import CarDetails from './pages/CarDetails.jsx';
+import AddCar from './pages/AddCar.jsx';
+import PrivateRoute from './routes/PrivateRoute.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -25,6 +28,9 @@ const router = createBrowserRouter([
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '*', element: <ErrorPage /> }, // 404 fallback
+      {path:'/available-cars', element: <AvailableCars />} ,
+      {path:'/cars/:id',  element:<CarDetails />} ,
+       {path:'/add-car', element: <PrivateRoute><AddCar /></PrivateRoute>},
     ],
   },
 ]);
