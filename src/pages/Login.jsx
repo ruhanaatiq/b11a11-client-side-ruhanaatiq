@@ -12,16 +12,15 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const fetchJWTToken = async (email) => {
-    try {
-      const response = await axios.post("http://localhost:3000/jwt", { email });
-      const token = response.data.token;
-      localStorage.setItem("access-token", token); // ✅ Store token
-    } catch (error) {
-      console.error("JWT fetch failed:", error);
-      toast.error("Could not retrieve access token");
-    }
-  };
+const fetchJWTToken = async (email) => {
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, { email });
+    const token = response.data.token; // ✅ define token
+    localStorage.setItem("access-token", token);
+  } catch (error) {
+    console.error("JWT fetch failed:", error);
+  }
+};
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -71,7 +70,7 @@ const Login = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <button onClick={handleGoogleLogin} className="btn btn-outline bg-blue-400 w-full mt-3">
+        <button onClick={handleGoogleLogin} className="btn btn-outline bg-blue-400 w-full mt-3"  disabled={loading}>
           <FcGoogle className="w-5 h-5 mr-2" />
           Continue with Google
         </button>
