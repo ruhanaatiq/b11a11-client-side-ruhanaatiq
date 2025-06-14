@@ -12,6 +12,7 @@ const AvailableCars = () => {
   const [selectedCar, setSelectedCar] = useState(null);
   const [bookingDates, setBookingDates] = useState({ startDate: "", endDate: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,7 +30,11 @@ const AvailableCars = () => {
 
   const availableCars = cars.filter((car) => car.availability !== false);
 
-  const sortedCars = [...availableCars].sort((a, b) => {
+  const filteredCars = availableCars.filter((car) =>
+    `${car.model} ${car.location}`.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const sortedCars = [...filteredCars].sort((a, b) => {
     switch (sortOption) {
       case "newest":
         return new Date(b.dateAdded) - new Date(a.dateAdded);
@@ -58,8 +63,18 @@ const AvailableCars = () => {
 
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between mb-4 gap-4">
-        <div>
-          <label className="mr-2 font-medium">Sort by:</label>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label className="font-medium">Search:</label>
+          <input
+            type="text"
+            placeholder="Search by model or location"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="input input-bordered"
+          />
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label className="font-medium">Sort by:</label>
           <select
             className="select select-bordered"
             onChange={(e) => setSortOption(e.target.value)}
@@ -70,18 +85,12 @@ const AvailableCars = () => {
             <option value="lowestPrice">Price (Lowest First)</option>
             <option value="highestPrice">Price (Highest First)</option>
           </select>
-        </div>
-        <div>
-          <button className="btn btn-outline btn-sm mr-2" onClick={() => setViewMode("grid")}>
-            Grid View
-          </button>
-          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("list")}>
-            List View
-          </button>
+          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("grid")}>Grid</button>
+          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("list")}>List</button>
         </div>
       </div>
 
-      {/* Car List */}
+      {/* Booked Car List */}
       {loading ? (
         <p>Loading cars...</p>
       ) : error ? (
@@ -98,14 +107,12 @@ const AvailableCars = () => {
               <img
                 src={car.images?.[0] || "https://via.placeholder.com/300x200?text=No+Image"}
                 alt={car.model}
-                className={`${
-                  viewMode === "grid" ? "w-full h-40 object-cover mb-4" : "w-40 h-28 object-cover"
-                } rounded`}
+                className={`$${viewMode === "grid" ? "w-full h-40 object-cover mb-4" : "w-40 h-28 object-cover"} rounded`}
               />
               <div className="flex-1">
-                <h3 className="text-xl font-semibold">{car.model}</h3>
-                <p className="text-gray-600">Price: ${car.dailyPrice}</p>
-                <p className="text-gray-600 text-sm mb-2">
+                <h3 className="text-xl text-blue-600 font-semibold">{car.model}</h3>
+                <p className="text-white">Price: ${car.dailyPrice}</p>
+                <p className="text-white text-sm mb-2">
                   Added: {car.dateAdded ? new Date(car.dateAdded).toLocaleDateString() : "N/A"}
                 </p>
                 <button
