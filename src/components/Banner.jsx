@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Typewriter } from 'react-simple-typewriter';
 
 const Banner = () => {
   return (
@@ -6,13 +7,11 @@ const Banner = () => {
       <div className="carousel w-full h-[80vh]">
         {/* Slide 1 */}
         <div id="slide1" className="carousel-item relative w-full">
-          <img
-            src="https://i.ibb.co/Cs7WVfzD/banner.jpg"
-            className="w-full object-cover"
-            alt="Banner Slide 1"
-          />
+          <img src="https://i.ibb.co/Cs7WVfzD/banner.jpg" className="w-full object-cover" alt="Banner Slide 1" />
           <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">Drive Your Dreams Today!</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <Typewriter words={['Drive Your Dreams Today!']} loop={false} cursor />
+            </h2>
             <Link to="/available-cars">
               <button className="px-6 py-3 text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg transition-all">
                 View Available Cars
@@ -27,13 +26,11 @@ const Banner = () => {
 
         {/* Slide 2 */}
         <div id="slide2" className="carousel-item relative w-full">
-          <img
-            src="https://i.ibb.co/tMkwJ9s7/banner2.jpg"
-            className="w-full object-cover"
-            alt="Banner Slide 2"
-          />
+          <img src="https://i.ibb.co/tMkwJ9s7/banner2.jpg" className="w-full object-cover" alt="Banner Slide 2" />
           <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">Your Next Car Awaits You!</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <Typewriter words={['Your Next Car Awaits You!']} loop={false} cursor />
+            </h2>
             <Link to="/available-cars">
               <button className="px-6 py-3 text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg transition-all">
                 View Available Cars
@@ -48,13 +45,11 @@ const Banner = () => {
 
         {/* Slide 3 */}
         <div id="slide3" className="carousel-item relative w-full">
-          <img
-            src="https://i.ibb.co/5WN8XtCF/banner3.jpg"
-            className="w-full object-cover"
-            alt="Banner Slide 3"
-          />
+          <img src="https://i.ibb.co/5WN8XtCF/banner3.jpg" className="w-full object-cover" alt="Banner Slide 3" />
           <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">Feel the Power of Every Ride!</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <Typewriter words={['Feel the Power of Every Ride!']} loop={false} cursor />
+            </h2>
             <Link to="/available-cars">
               <button className="px-6 py-3 text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg transition-all">
                 View Available Cars

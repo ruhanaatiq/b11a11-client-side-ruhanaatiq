@@ -33,11 +33,11 @@ const SpecialOffers = () => {
           >
             <h3 className="text-2xl font-semibold">{offer.title}</h3>
             <p className="mt-2 mb-4">{offer.subtitle}</p>
-            <Link to="/available-cars">
-              <button className="px-4 py-2 bg-white text-black font-medium rounded hover:scale-105 transition-transform">
-                {offer.buttonText}
-              </button>
-            </Link>
+            <Link to={offer.buttonText === "Learn More" ? "/learn-more" : "/available-cars"}>
+  <button className="px-4 py-2 bg-white text-black font-medium rounded hover:scale-105 transition-transform">
+    {offer.buttonText}
+  </button>
+</Link>
           </motion.div>
         ))}
       </div>
