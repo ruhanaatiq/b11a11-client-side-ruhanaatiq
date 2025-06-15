@@ -14,7 +14,14 @@ const LearnMore = () => {
           </button>
         </Link>
       </div>
+ {/* Image Gallery */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+        {["https://i.ibb.co/N253vF8w/BMW-3-Series-2021-7.jpg", "https://i.ibb.co/JRG8Yrck/Tesla-Model-4.jpg", "https://i.ibb.co/GvH3gmCR/Chevrolet-1.jpg"].map((src, idx) => (
+          <img key={idx} src={src} alt="Luxury car" className="rounded-lg shadow" />
+        ))}
+      </div>
 
+      
       {/* Highlights Section */}
       <div className="grid md:grid-cols-2 gap-6 mb-12">
         {[
@@ -36,14 +43,7 @@ const LearnMore = () => {
         ))}
       </div>
 
-      {/* Image Gallery */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-        {["https://i.ibb.co/N253vF8w/BMW-3-Series-2021-7.jpg", "https://i.ibb.co/YDZJWwN/nissan-altima.jpg", "https://i.ibb.co/GvH3gmCR/Chevrolet-1.jpg"].map((src, idx) => (
-          <img key={idx} src={src} alt="Luxury car" className="rounded-lg shadow" />
-        ))}
-      </div>
-
-      
+     
 
       {/* Call to Action */}
       <div className="text-center">
