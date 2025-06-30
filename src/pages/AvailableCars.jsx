@@ -15,6 +15,7 @@ const AvailableCars = () => {
   const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
+  const todayStr = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     setLoading(true);
@@ -55,7 +56,52 @@ const AvailableCars = () => {
     setSubmitting(false);
   };
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const handleBooking = async () => {
+    const token = localStorage.getItem("access-token");
+    if (!token) {
+      toast.error("You must be logged in to book a car.");
+      return;
+    }
+
+    const { startDate, endDate } = bookingDates;
+    if (!startDate || !endDate) {
+      toast.error("Please select both start and end dates.");
+      return;
+    }
+
+    if (new Date(endDate) < new Date(startDate)) {
+      toast.error("End date cannot be before start date.");
+      return;
+    }
+
+    if (new Date(endDate).getTime() === new Date(startDate).getTime()) {
+      toast.error("Booking must be at least one full day.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await api.post("/bookings", {
+        carId: selectedCar._id,
+        startDate,
+        endDate,
+      });
+      toast.success("Booking successful!");
+      closeModal();
+      navigate("/my-bookings");
+    } catch (err) {
+      console.error("Booking error:", err.response?.data || err.message);
+      if (err.response?.status === 403) {
+        toast.error("Session expired. Redirecting to login.");
+        localStorage.removeItem("access-token");
+        navigate("/login");
+      } else {
+        toast.error("Booking failed. Please try again.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -77,20 +123,24 @@ const AvailableCars = () => {
           <label className="font-medium">Sort by:</label>
           <select
             className="select select-bordered"
-            onChange={(e) => setSortOption(e.target.value)}
             value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
           >
             <option value="newest">Date Added (Newest First)</option>
             <option value="oldest">Date Added (Oldest First)</option>
             <option value="lowestPrice">Price (Lowest First)</option>
             <option value="highestPrice">Price (Highest First)</option>
           </select>
-          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("grid")}>Grid</button>
-          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("list")}>List</button>
+          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("grid")}>
+            Grid
+          </button>
+          <button className="btn btn-outline btn-sm" onClick={() => setViewMode("list")}>
+            List
+          </button>
         </div>
       </div>
 
-      {/* Booked Car List */}
+      {/* Car List */}
       {loading ? (
         <p>Loading cars...</p>
       ) : error ? (
@@ -102,13 +152,25 @@ const AvailableCars = () => {
           {sortedCars.map((car) => (
             <div
               key={car._id}
-              className={`border rounded p-4 shadow-sm ${viewMode === "list" ? "flex items-center gap-4" : ""}`}
+              className={`border rounded p-4 shadow-sm bg-base-100 ${
+                viewMode === "list" ? "flex gap-4 items-center" : ""
+              }`}
             >
-              <img
-                src={car.images?.[0] || "https://via.placeholder.com/300x200?text=No+Image"}
-                alt={car.model}
-                className={`$${viewMode === "grid" ? "w-full h-40 object-cover mb-4" : "w-40 h-28 object-cover"} rounded`}
-              />
+              {viewMode === "grid" ? (
+                <div className="aspect-[4/3] w-full overflow-hidden rounded mb-4">
+                  <img
+                    src={car.images?.[0] || "https://via.placeholder.com/300x200?text=No+Image"}
+                    alt={car.model}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <img
+                  src={car.images?.[0] || "https://via.placeholder.com/300x200?text=No+Image"}
+                  alt={car.model}
+                  className="w-40 h-28 object-cover rounded"
+                />
+              )}
               <div className="flex-1">
                 <h3 className="text-xl text-blue-600 font-semibold">{car.model}</h3>
                 <p className="text-white">Price: ${car.dailyPrice}</p>
@@ -160,54 +222,7 @@ const AvailableCars = () => {
                 className="input input-bordered w-full"
               />
               <button
-                onClick={async () => {
-                  const token = localStorage.getItem("access-token");
-                  if (!token) {
-                    toast.error("You must be logged in to book a car.");
-                    return;
-                  }
-
-                  if (!bookingDates.startDate || !bookingDates.endDate) {
-                    toast.error("Please select both start and end dates.");
-                    return;
-                  }
-
-                  if (new Date(bookingDates.endDate) < new Date(bookingDates.startDate)) {
-                    toast.error("End date cannot be before start date.");
-                    return;
-                  }
-
-                  if (
-                    new Date(bookingDates.endDate).getTime() ===
-                    new Date(bookingDates.startDate).getTime()
-                  ) {
-                    toast.error("Booking must be at least one full day.");
-                    return;
-                  }
-
-                  try {
-                    setSubmitting(true);
-                    await api.post("/bookings", {
-                      carId: selectedCar._id,
-                      startDate: bookingDates.startDate,
-                      endDate: bookingDates.endDate,
-                    });
-                    toast.success("Booking successful!");
-                    closeModal();
-                    navigate("/my-bookings");
-                  } catch (err) {
-                    console.error("Booking error:", err.response?.data || err.message);
-                    if (err.response?.status === 403) {
-                      toast.error("Session expired. Redirecting to login.");
-                      localStorage.removeItem("access-token");
-                      navigate("/login");
-                    } else {
-                      toast.error("Booking failed. Please try again.");
-                    }
-                  } finally {
-                    setSubmitting(false);
-                  }
-                }}
+                onClick={handleBooking}
                 disabled={submitting}
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
               >

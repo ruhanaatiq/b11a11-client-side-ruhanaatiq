@@ -27,7 +27,7 @@ const AddCar = () => {
     };
 
     try {
-      await api.post("/cars", carData); // ✅ no extra `/api`
+      await api.post("/cars", carData); 
       toast.success("✅ Car added successfully!");
       reset();
       navigate("/available-cars");

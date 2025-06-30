@@ -15,7 +15,7 @@ const Login = () => {
 const fetchJWTToken = async (email) => {
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, { email });
-    const token = response.data.token; // ✅ define token
+    const token = response.data.token;
     localStorage.setItem("access-token", token);
   } catch (error) {
     console.error("JWT fetch failed:", error);

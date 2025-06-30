@@ -1,13 +1,13 @@
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
-
+import logo from "../assets/logo.png";
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-white text-black">
       <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center md:text-left">
         {/* Logo + Site Name */}
         <div className="flex flex-col items-center md:items-start">
           <img
-            src="https://i.ibb.co/tPwbDVX9/logo.jpg" 
+            src={logo}
             alt="Logo"
             className="w-16 h-16 mb-2"
           />
