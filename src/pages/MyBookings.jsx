@@ -59,14 +59,14 @@ const MyBookings = () => {
   };
 
   return (
-    <div className="p-4 overflow-x-auto">
-      <h2 className="text-2xl font-bold mb-4">My Bookings</h2>
+    <div className="max-w-7xl mx-auto px-4 py-6 overflow-x-auto">
+      <h2 className="text-2xl font-bold mb-4 text-white">My Bookings</h2>
 
       {bookings.length === 0 ? (
         <p className="text-center text-gray-600">No bookings found.</p>
       ) : (
         <table className="table-auto w-full text-sm border-collapse">
-          <thead className="bg-red-600 text-left font-semibold">
+          <thead className="bg-blue-900 text-left font-semibold text-white">
             <tr>
               <th className="p-2">Car Image</th>
               <th className="p-2">Car Model</th>
@@ -162,7 +162,7 @@ const MyBookings = () => {
       {/* Modify Modal */}
       {showModifyModal && selectedBooking && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-blue-600 p-6 rounded shadow-lg space-y-4">
+          <div className="bg-white p-6 rounded shadow-lg space-y-4 w-80">
             <h3 className="text-lg font-semibold">Modify Booking Date</h3>
             <input
               type="datetime-local"

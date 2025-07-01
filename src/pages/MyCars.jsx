@@ -69,7 +69,7 @@ const MyCars = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6 text-orange-600">My Cars</h2>
+      <h2 className="text-3xl font-bold mb-6 text-white">My Cars</h2>
 
       {cars.length === 0 ? (
         <p className="text-center">
@@ -79,7 +79,7 @@ const MyCars = () => {
         <div className="overflow-x-auto">
           <table className="table w-full">
             <thead>
-              <tr>
+              <tr className="bg-blue-900 text-white">
                 <th>Image</th>
                 <th>Model</th>
                 <th>Price/Day</th>

@@ -7,38 +7,39 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    logout()
-      .then(() => {
-        // Successfully logged out
-      })
-      .catch((error) => console.error(error));
+    logout().catch((error) => console.error(error));
   };
+
+  const navLinkClass = ({ isActive }) =>
+    `px-3 py-2 rounded ${
+      isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+    } hover:text-blue-800`;
 
   const navItems = (
     <>
       <li>
-        <NavLink to="/" className="px-3 py-2">Home</NavLink>
+        <NavLink to="/" className={navLinkClass}>Home</NavLink>
       </li>
       <li>
-        <NavLink to="/available-cars" className="px-3 py-2">Available Cars</NavLink>
+        <NavLink to="/available-cars" className={navLinkClass}>Available Cars</NavLink>
       </li>
 
       {!user && (
         <li>
-          <NavLink to="/login" className="px-3 py-2">Log In</NavLink>
+          <NavLink to="/login" className={navLinkClass}>Log In</NavLink>
         </li>
       )}
 
       {user && (
         <>
           <li>
-            <NavLink to="/add-car" className="px-3 py-2">Add Car</NavLink>
+            <NavLink to="/add-car" className={navLinkClass}>Add Car</NavLink>
           </li>
           <li>
-            <NavLink to="/my-cars" className="px-3 py-2">My Cars</NavLink>
+            <NavLink to="/my-cars" className={navLinkClass}>My Cars</NavLink>
           </li>
           <li>
-            <NavLink to="/my-bookings" className="px-3 py-2">My Bookings</NavLink>
+            <NavLink to="/my-bookings" className={navLinkClass}>My Bookings</NavLink>
           </li>
           <li>
             <button onClick={handleLogout} className="px-3 py-2 text-red-500 hover:text-red-700">

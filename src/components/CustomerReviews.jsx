@@ -24,7 +24,7 @@ const reviews = [
 
 const CustomerReviews = () => {
   return (
-    <section className="bg-amber-100 py-12 px-4">
+    <section className="bg-blue-300 py-12 px-4">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-3xl font-bold mb-10 text-blue-900">Customer Reviews</h2>
 
