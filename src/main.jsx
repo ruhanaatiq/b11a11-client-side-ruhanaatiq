@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <MainLayout />, // 🌟 Shared layout with Navbar
     children: [
-      { path: '/', element: <Home /> }, 
+     { index: true, element: <Home /> }, 
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '*', element: <ErrorPage /> }, // 404 fallback

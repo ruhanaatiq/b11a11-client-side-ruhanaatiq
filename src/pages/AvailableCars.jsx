@@ -104,7 +104,7 @@ const AvailableCars = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto ">
       <h2 className="text-3xl font-bold mb-6 text-orange-600">Available Cars</h2>
 
       {/* Toolbar */}
@@ -152,7 +152,7 @@ const AvailableCars = () => {
           {sortedCars.map((car) => (
             <div
               key={car._id}
-              className={`border rounded p-4 shadow-sm bg-base-100 ${
+              className={`border rounded p-4 shadow-sm bg-white ${
                 viewMode === "list" ? "flex gap-4 items-center" : ""
               }`}
             >
@@ -171,10 +171,10 @@ const AvailableCars = () => {
                   className="w-40 h-28 object-cover rounded"
                 />
               )}
-              <div className="flex-1">
+              <div className="flex-1 ">
                 <h3 className="text-xl text-blue-600 font-semibold">{car.model}</h3>
-                <p className="text-white">Price: ${car.dailyPrice}</p>
-                <p className="text-white text-sm mb-2">
+                <p className="text-orange-600">Price: ${car.dailyPrice}</p>
+                <p className="text-orange-600 text-sm mb-2">
                   Added: {car.dateAdded ? new Date(car.dateAdded).toLocaleDateString() : "N/A"}
                 </p>
                 <button

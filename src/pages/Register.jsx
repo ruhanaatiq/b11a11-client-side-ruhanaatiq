@@ -45,25 +45,74 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-orange-600">Create an Account</h2>
-        <form onSubmit={handleRegister}>
-          <input type="text" name="name" required placeholder="Full Name" className="input input-bordered w-full mb-4" />
-          <input type="text" name="photoURL" placeholder="Photo URL (optional)" className="input input-bordered w-full mb-4" />
-          <input type="email" name="email" required placeholder="Email" className="input input-bordered w-full mb-4" />
-          <input type="password" name="password" required placeholder="Password" className="input input-bordered w-full mb-4" />
-          <button type="submit" className="btn bg-orange-500 w-full" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+      <div className="bg-white rounded shadow-md w-full max-w-4xl flex flex-col md:flex-row overflow-hidden">
+        
+        {/* Illustration */}
+        <div className="hidden md:flex md:w-1/2 bg-orange-50 items-center justify-center p-6">
+          <img
+            src="https://i.ibb.co.com/LDFH3Y4R/7765513-3725835.jpg"
+            alt="Register Illustration"
+            className="max-w-sm"
+          />
+        </div>
+
+        {/* Form */}
+        <div className="w-full md:w-1/2 p-8">
+          <h2 className="text-2xl font-bold mb-6 text-center text-orange-600">
+            Create an Account
+          </h2>
+          <form onSubmit={handleRegister}>
+            <input
+              type="text"
+              name="name"
+              required
+              placeholder="Full Name"
+              className="input input-bordered w-full mb-4"
+            />
+            <input
+              type="text"
+              name="photoURL"
+              placeholder="Photo URL (optional)"
+              className="input input-bordered w-full mb-4"
+            />
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Email"
+              className="input input-bordered w-full mb-4"
+            />
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="Password"
+              className="input input-bordered w-full mb-4"
+            />
+            <button
+              type="submit"
+              className="btn bg-orange-500 w-full"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </form>
+
+          <button
+            onClick={handleGoogleRegister}
+            className="btn btn-outline bg-blue-400 w-full mt-3 flex items-center justify-center"
+          >
+            <FcGoogle className="w-5 h-5 mr-2" />
+            Continue with Google
           </button>
-        </form>
-       <button onClick={handleGoogleRegister} className="btn btn-outline bg-blue-400 w-full mt-3">
-  <FcGoogle className="w-5 h-5 mr-2" />
-  Continue with Google
-</button>
-        <p className="mt-4 text-center text-sm">
-          Already have an account?{" "}
-          <Link to="/login" className="text-orange-500 font-medium">Login</Link>
-        </p>
+
+          <p className="mt-4 text-center text-sm">
+            Already have an account?{" "}
+            <Link to="/login" className="text-orange-500 font-medium">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
