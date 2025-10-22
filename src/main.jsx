@@ -25,6 +25,7 @@ import LearnMore from './pages/LearnMore.jsx';
 import Deals from './pages/Deals.jsx';
 import SearchResults from './pages/SearchResults.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import ThemeProvider from './context/ThemeContext.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -51,7 +52,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
+      <ThemeProvider>
       <RouterProvider router={router} />
+      </ThemeProvider>
     </AuthProvider>
   </StrictMode>
 );
