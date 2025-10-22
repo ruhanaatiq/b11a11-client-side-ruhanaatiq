@@ -41,6 +41,9 @@ const Navbar = () => {
           <li>
             <NavLink to="/my-bookings" className={navLinkClass}>My Bookings</NavLink>
           </li>
+           <li>
+            <NavLink to="/deals" className={navLinkClass}>Deals</NavLink>
+          </li>
           <li>
             <button onClick={handleLogout} className="px-3 py-2 text-red-500 hover:text-red-700">
               Logout

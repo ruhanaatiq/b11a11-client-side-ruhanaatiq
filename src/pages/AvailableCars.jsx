@@ -105,7 +105,7 @@ const AvailableCars = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto ">
-      <h2 className="text-3xl font-bold mb-6 text-orange-600">Available Cars</h2>
+      <h2 className="text-3xl font-bold mb-6 text-white">Available Cars</h2>
 
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between mb-4 gap-4">

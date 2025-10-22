@@ -18,7 +18,7 @@ const offers = [
 
 const SpecialOffers = () => {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="max-full mx-auto px-4 py-12 bg-[#34699A]">
       <h2 className="text-3xl font-bold text-center mb-10">🎉 Special Offers</h2>
 
       <div className="grid md:grid-cols-2 gap-8">
