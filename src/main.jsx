@@ -24,6 +24,7 @@ import MyBookings from './pages/MyBookings.jsx';
 import LearnMore from './pages/LearnMore.jsx';
 import Deals from './pages/Deals.jsx';
 import SearchResults from './pages/SearchResults.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -40,8 +41,8 @@ const router = createBrowserRouter([
        {path:'/my-bookings',element:<PrivateRoute><MyBookings/></PrivateRoute>},
        {path:'/learn-more',element:<LearnMore/>},
               {path:'/deals',element:<Deals/>},
-                            {path:'/search',element:<SearchResults/>},
-
+{path:'/search',element:<SearchResults/>},
+      { path: '/dashboard', element: <PrivateRoute><Dashboard /></PrivateRoute> },
 
     ],
   },
