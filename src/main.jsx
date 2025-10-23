@@ -26,6 +26,7 @@ import Deals from './pages/Deals.jsx';
 import SearchResults from './pages/SearchResults.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import ThemeProvider from './context/ThemeContext.jsx';
+import Feedback from './pages/Feedback.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
               {path:'/deals',element:<Deals/>},
 {path:'/search',element:<SearchResults/>},
       { path: '/dashboard', element: <PrivateRoute><Dashboard /></PrivateRoute> },
+      {path:'/feedback', element:<PrivateRoute><Feedback/></PrivateRoute>},
 
     ],
   },

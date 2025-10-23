@@ -35,7 +35,7 @@ const RecentListings = () => {
   return (
     <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl font-bold mb-10 text-center ">Recent Listings</h2>
+        <h2 className="text-4xl font-extrabold mb-10 text-center">Recent Listings</h2>
 
         {cars.length === 0 ? (
           <p className="text-center text-gray-500">No listings available.</p>
