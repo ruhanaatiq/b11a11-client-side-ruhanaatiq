@@ -1,89 +1,221 @@
-import { useEffect, useState } from "react";
+// src/components/RecentListings.jsx
+import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/api"; // your axios instance with interceptors
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-const RecentListings = () => {
+/* ---- tiny helpers ---- */
+const fmtMoney = (n) =>
+  typeof n === "number" ? n.toLocaleString(undefined, { minimumFractionDigits: 0 }) : "—";
+
+const daysBetween = (a, b = new Date()) =>
+  Math.floor((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24));
+
+const placeholder =
+  "https://images.unsplash.com/photo-1549921296-3fd62c953cf5?q=80&w=1400&auto=format&fit=crop"; // neutral car img
+
+export default function RecentListings() {
   const [cars, setCars] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCars = async () => {
+    let alive = true;
+    (async () => {
       try {
-        const response = await api.get("/cars");
-        const sorted = response.data.sort(
-          (a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)
-        );
-        setCars(sorted.slice(0, 8));
+        const res = await api.get("/cars");
+        const sorted = (res?.data ?? [])
+          .slice()
+          .sort(
+            (a, b) => new Date(b?.dateAdded || 0) - new Date(a?.dateAdded || 0)
+          );
+        if (alive) setCars(sorted.slice(0, 8));
       } catch (err) {
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          setError("Please log in to view recent listings.");
-        } else {
-          setError("Failed to fetch cars.");
+        if (alive) {
+          if (err.response?.status === 401 || err.response?.status === 403) {
+            setError("Please log in to view recent listings.");
+          } else {
+            setError("Failed to fetch cars.");
+          }
         }
       } finally {
-        setLoading(false);
+        if (alive) setLoading(false);
       }
+    })();
+    return () => {
+      alive = false;
     };
-
-    fetchCars();
   }, []);
 
-  if (loading) return <p className="text-center mt-8 text-blue-500">Loading...</p>;
-  if (error) return <p className="text-center mt-8 text-red-500">{error}</p>;
+  const skeletons = useMemo(() => new Array(8).fill(0), []);
 
   return (
-    <section className="py-16 ">
+    <section className="py-16 bg-gradient-to-b from-base-200/60 to-base-100/40">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl font-extrabold mb-10 text-center">Recent Listings</h2>
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            Recent Listings
+          </h2>
+          <div className="mx-auto mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500" />
+        </div>
 
-        {cars.length === 0 ? (
-          <p className="text-center text-gray-500">No listings available.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {cars.map((car) => (
+        {/* Loading */}
+        {loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+            {skeletons.map((_, i) => (
               <div
-                key={car._id}
-                className="card shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 bg-white"
+                key={i}
+                className="card bg-base-100/60 backdrop-blur border border-base-300/40 shadow animate-pulse"
               >
-                <figure className="h-48">
-                  <img
-                    src={car.images?.[0]}
-                    alt={car.model}
-                    className="w-full h-full object-cover rounded-t-lg"
-                  />
-                </figure>
+                <div className="h-48 w-full bg-base-300/60" />
                 <div className="card-body">
-                  <h3 className="text-2xl font-semibold text-blue-700">{car.model}</h3>
-                  <p className="text-orange-500 font-medium">${car.dailyPrice}/day</p>
-
-                  <div className="flex items-center gap-2">
-                    {car.availability ? (
-                      <span className="text-green-600 flex items-center gap-1">
-                        <FaCheckCircle /> Available
-                      </span>
-                    ) : (
-                      <span className="text-red-600 flex items-center gap-1">
-                        <FaTimesCircle /> Not Available
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="text-sm text-gray-500">
-                    Bookings: <strong>{car.bookingCount}</strong>
-                  </p>
-
-                  <p className="text-sm text-gray-400">
-                    Added: {new Date(car.dateAdded).toLocaleDateString()}
-                  </p>
+                  <div className="h-5 w-2/3 bg-base-300/70 rounded" />
+                  <div className="h-4 w-24 bg-base-300/70 rounded mt-2" />
+                  <div className="h-4 w-32 bg-base-300/70 rounded mt-4" />
+                  <div className="h-8 w-full bg-base-300/70 rounded mt-4" />
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        {/* Error */}
+        {!loading && error && (
+          <div className="max-w-xl mx-auto alert alert-error shadow mb-4">
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Empty */}
+        {!loading && !error && cars.length === 0 && (
+          <p className="text-center text-base-content/60">
+            No listings available.
+          </p>
+        )}
+
+        {/* Grid */}
+        {!loading && !error && cars.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+            {cars.map((car) => {
+              const img = car?.images?.[0] || placeholder;
+              const addedDate = new Date(car?.dateAdded || Date.now());
+              const isNew = daysBetween(addedDate) <= 7;
+
+              return (
+                <div
+                  key={car._id}
+                  className="
+                    group card overflow-hidden
+                    bg-base-100/80 backdrop-blur border border-base-300/40
+                    shadow-[0_8px_30px_-12px_rgba(0,0,0,0.2)]
+                    hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.25)]
+                    transition-all duration-300 motion-safe:hover:-translate-y-1
+                  "
+                >
+                  {/* Image area */}
+                  <figure className="relative h-48 w-full overflow-hidden">
+                    <img
+                      src={img}
+                      alt={car?.model || "Car"}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      onError={(e) => {
+                        e.currentTarget.src = placeholder;
+                      }}
+                    />
+
+                    {/* availability badge */}
+                    <div className="absolute left-3 top-3">
+                      {car?.availability ? (
+                        <span className="badge badge-success gap-1 text-white">
+                          <FaCheckCircle className="text-xs" />
+                          Available
+                        </span>
+                      ) : (
+                        <span className="badge badge-error gap-1 text-white">
+                          <FaTimesCircle className="text-xs" />
+                          Not Available
+                        </span>
+                      )}
+                    </div>
+
+                    {/* new ribbon */}
+                    {isNew && (
+                      <div className="absolute right-0 top-3">
+                        <span className="badge badge-accent">New</span>
+                      </div>
+                    )}
+
+                    {/* subtle gradient for text legibility if needed later */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
+                  </figure>
+
+                  {/* Body */}
+                  <div className="card-body">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-lg md:text-xl font-semibold text-base-content">
+                        {car?.model || "Vehicle"}
+                      </h3>
+                      <div className="text-right">
+                        <div className="text-xl font-extrabold text-blue-700">
+                          ${fmtMoney(car?.dailyPrice)}
+                        </div>
+                        <div className="text-xs text-base-content/60 -mt-0.5">
+                          per day
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-1 text-sm text-base-content/70">
+                      Bookings:{" "}
+                      <strong className="text-base-content">
+                        {car?.bookingCount ?? 0}
+                      </strong>
+                    </div>
+
+                    <div className="text-xs text-base-content/50">
+                      Added: {addedDate.toLocaleDateString()}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="card-actions mt-3 items-center justify-between">
+                      <Link
+                        to={`/cars/${car?._id}`}
+                        className="
+                          btn btn-sm btn-outline
+                          motion-safe:transition-all motion-safe:hover:-translate-y-0.5
+                        "
+                      >
+                        View Details
+                      </Link>
+                      {car?.availability ? (
+                        <Link
+                          to={`/book/${car?._id}`}
+                          className="
+                            btn btn-sm bg-gradient-to-r from-blue-600 to-cyan-500
+                            hover:from-blue-700 hover:to-cyan-600 text-white
+                            shadow hover:shadow-md
+                            motion-safe:transition-all motion-safe:hover:-translate-y-0.5
+                          "
+                        >
+                          Book Now
+                        </Link>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-disabled"
+                          disabled
+                        >
+                          Unavailable
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
-};
-
-export default RecentListings;
+}

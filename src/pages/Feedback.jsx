@@ -45,7 +45,7 @@ export default function Feedback() {
     }
     setSubmitting(true);
     try {
-      await api.post("/feedback", form);
+await api.post("/feedback", form);
       setSuccess(true);
       // optional redirect after a short delay
       setTimeout(() => nav("/dashboard"), 900);
