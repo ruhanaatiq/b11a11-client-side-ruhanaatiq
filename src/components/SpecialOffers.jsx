@@ -9,7 +9,8 @@ const offers = [
     cta: { label: "Book Now", to: "/available-cars" },
     badge: "WEEKEND15",
     note: "Limited time • T&C apply",
-    bg: "from-indigo-600 via-purple-600 to-pink-600",
+    // Deep ocean → cyan beam
+    bg: "from-[#0ea5e9] via-[#2563eb] to-[#0ea5e9]", // cyan-500 → blue-600 → cyan-500
   },
   {
     title: "Luxury Cars at $99/day!",
@@ -17,7 +18,8 @@ const offers = [
     cta: { label: "Learn More", to: "/learn-more" },
     badge: "LUX99",
     note: "On selected models • T&C apply",
-    bg: "from-amber-400 via-rose-500 to-fuchsia-600",
+    // Royal blue sweep
+    bg: "from-[#1d4ed8] via-[#0ea5e9] to-[#1d4ed8]", // blue-700 → cyan-500 → blue-700
   },
 ];
 
@@ -51,7 +53,7 @@ export default function SpecialOffers() {
       />
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-gradient-to-br from-fuchsia-500/20 to-rose-400/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-400/10 blur-3xl"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.2 }}
@@ -124,8 +126,7 @@ export default function SpecialOffers() {
                     <Link to={offer.cta.to} aria-label={offer.cta.label}>
                       <button
                         className="
-                          btn btn-sm md:btn-md text-base
-                          bg-white text-black hover:bg-white/90
+                          btn btn-sm bg-white text-black hover:bg-white/90
                           rounded-full px-5 md:px-6 font-semibold
                           shadow-md hover:shadow-lg
                         "
@@ -136,9 +137,7 @@ export default function SpecialOffers() {
 
                     <button
                       type="button"
-                      onClick={() => {
-                        navigator.clipboard?.writeText(offer.badge);
-                      }}
+                      onClick={() => navigator.clipboard?.writeText(offer.badge)}
                       className="
                         btn btn-sm md:btn-md btn-outline border-white/40 text-white
                         hover:border-white hover:bg-white/10 rounded-full
