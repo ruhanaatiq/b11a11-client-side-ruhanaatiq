@@ -111,7 +111,7 @@ export default function SpecialOffers() {
                     <span className="badge badge-accent badge-outline text-white/90">
                       {offer.badge}
                     </span>
-                    <span className="badge badge-ghost bg-white/15 text-white/90">
+                    <span className="badge badge-ghost bg-white text-blue-500">
                       Limited Offer
                     </span>
                   </div>

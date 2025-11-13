@@ -200,9 +200,7 @@ const Navbar = () => {
           >
             <img src={logo} alt="DriveNow logo" className="h-8 w-8" />
             <span className="tracking-tight">DriveNow</span>
-            <span className="ml-1 hidden lg:inline-block text-[10px] font-semibold uppercase text-blue-700/70 bg-blue-100 rounded-full px-2 py-0.5">
-              Beta
-            </span>
+           
           </Link>
 
           {/* Links */}
