@@ -13,7 +13,9 @@ const Banner = () => {
               <Typewriter words={['Drive Your Dreams Today!']} loop={false} cursor />
             </h2>
             <Link to="/available-cars">
-              <button className="px-6 py-3 text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg transition-all">
+              <button className="px-6 py-3 text-lg font-semibold  bg-gradient-to-r from-blue-600 to-cyan-500
+                            hover:from-blue-700 hover:to-cyan-600 text-white
+                             hover:shadow-md  rounded-lg shadow-lg transition-all">
                 View Available Cars
               </button>
             </Link>
