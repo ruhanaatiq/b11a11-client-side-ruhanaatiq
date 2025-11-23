@@ -3,6 +3,7 @@ import RecentListings from '../components/RecentListings';
 import SpecialOffers from '../components/SpecialOffers';
 import WhyChooseUs from '../components/WhyChooseUs';
 import BrandMarquee from '../components/BrandMarquee';
+import Testimonials from '../components/Testimonials';
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Banner />
       <WhyChooseUs></WhyChooseUs>
       <RecentListings></RecentListings>
+      <Testimonials/>
       <SpecialOffers></SpecialOffers>
       
 
