@@ -1,18 +1,57 @@
 // src/components/RecentListings.jsx
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/api"; // your axios instance with interceptors
+import api from "../api/api";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { motion } from "framer-motion";
 
-/* ---- tiny helpers ---- */
+/* ---- helpers ---- */
 const fmtMoney = (n) =>
-  typeof n === "number" ? n.toLocaleString(undefined, { minimumFractionDigits: 0 }) : "—";
+  typeof n === "number"
+    ? n.toLocaleString(undefined, { minimumFractionDigits: 0 })
+    : "—";
 
 const daysBetween = (a, b = new Date()) =>
   Math.floor((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24));
 
 const placeholder =
-  "https://images.unsplash.com/photo-1549921296-3fd62c953cf5?q=80&w=1400&auto=format&fit=crop"; // neutral car img
+  "https://images.unsplash.com/photo-1549921296-3fd62c953cf5?q=80&w=1400&auto=format&fit=crop";
+
+/* ---- animation variants ---- */
+
+// whole grid wrapper
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+// each card – direction comes from `custom`
+const cardVariants = {
+  hidden: (direction) => ({
+    opacity: 0,
+    y: 30,
+    x: direction, // slide from left/right
+    scale: 0.96,
+  }),
+  visible: {
+    opacity: 1,
+    y: 0,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
+};
 
 export default function RecentListings() {
   const [cars, setCars] = useState([]);
@@ -21,6 +60,7 @@ export default function RecentListings() {
 
   useEffect(() => {
     let alive = true;
+
     (async () => {
       try {
         const res = await api.get("/cars");
@@ -29,6 +69,7 @@ export default function RecentListings() {
           .sort(
             (a, b) => new Date(b?.dateAdded || 0) - new Date(a?.dateAdded || 0)
           );
+
         if (alive) setCars(sorted.slice(0, 8));
       } catch (err) {
         if (alive) {
@@ -42,6 +83,7 @@ export default function RecentListings() {
         if (alive) setLoading(false);
       }
     })();
+
     return () => {
       alive = false;
     };
@@ -50,16 +92,29 @@ export default function RecentListings() {
   const skeletons = useMemo(() => new Array(8).fill(0), []);
 
   return (
-    <section className="py-16 bg-gradient-to-b from-base-200/60 to-base-100/40">
+    <motion.section
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="py-16 bg-gradient-to-b from-base-200/60 to-base-100/40"
+    >
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-10">
+        {/* Heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-10"
+        >
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
             Recent Listings
           </h2>
           <div className="mx-auto mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500" />
-        </div>
+        </motion.div>
 
-        {/* Loading */}
+        {/* Loading skeletons */}
         {loading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {skeletons.map((_, i) => (
@@ -93,17 +148,26 @@ export default function RecentListings() {
           </p>
         )}
 
-        {/* Grid */}
+        {/* Animated grid */}
         {!loading && !error && cars.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-            {cars.map((car) => {
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6"
+          >
+            {cars.map((car, idx) => {
               const img = car?.images?.[0] || placeholder;
               const addedDate = new Date(car?.dateAdded || Date.now());
               const isNew = daysBetween(addedDate) <= 7;
+              const slideFrom = idx % 2 === 0 ? -40 : 40; // alternate left/right
 
               return (
-                <div
+                <motion.div
                   key={car._id}
+                  variants={cardVariants}
+                  custom={slideFrom}
                   className="
                     group card overflow-hidden
                     bg-base-100/80 backdrop-blur border border-base-300/40
@@ -123,7 +187,7 @@ export default function RecentListings() {
                       }}
                     />
 
-                    {/* availability badge */}
+                    {/* Availability badge */}
                     <div className="absolute left-3 top-3">
                       {car?.availability ? (
                         <span className="badge badge-success gap-1 text-white">
@@ -138,18 +202,17 @@ export default function RecentListings() {
                       )}
                     </div>
 
-                    {/* new ribbon */}
+                    {/* New badge */}
                     {isNew && (
                       <div className="absolute right-0 top-3">
                         <span className="badge badge-accent">New</span>
                       </div>
                     )}
 
-                    {/* subtle gradient for text legibility if needed later */}
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
                   </figure>
 
-                  {/* Body */}
+                  {/* Card body */}
                   <div className="card-body">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-lg md:text-xl font-semibold text-base-content">
@@ -210,12 +273,12 @@ export default function RecentListings() {
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }
